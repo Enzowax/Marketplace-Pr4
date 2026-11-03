@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <edmx:Runtime>
+    <edmx:StorageModels>
+<Schema Namespace="Marketplace.Api.Data.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="MarketplaceApiDataStoreContainer">
+    <EntitySet Name="CartItems" EntityType="Marketplace.Api.Data.Store.CartItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="Marketplace.Api.Data.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Favorites" EntityType="Marketplace.Api.Data.Store.Favorites" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderItems" EntityType="Marketplace.Api.Data.Store.OrderItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Orders" EntityType="Marketplace.Api.Data.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PickupPoints" EntityType="Marketplace.Api.Data.Store.PickupPoints" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="Marketplace.Api.Data.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Reviews" EntityType="Marketplace.Api.Data.Store.Reviews" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Marketplace.Api.Data.Store.Users" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK__CartItems__Produ__4BAC3F29" Association="Marketplace.Api.Data.Store.FK__CartItems__Produ__4BAC3F29">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="CartItems" EntitySet="CartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CartItems__UserI__4AB81AF0" Association="Marketplace.Api.Data.Store.FK__CartItems__UserI__4AB81AF0">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="CartItems" EntitySet="CartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Favorites__Produ__5070F446" Association="Marketplace.Api.Data.Store.FK__Favorites__Produ__5070F446">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Favorites" EntitySet="Favorites" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Favorites__UserI__4F7CD00D" Association="Marketplace.Api.Data.Store.FK__Favorites__UserI__4F7CD00D">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Favorites" EntitySet="Favorites" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderItem__Order__60A75C0F" Association="Marketplace.Api.Data.Store.FK__OrderItem__Order__60A75C0F">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderItem__Produ__619B8048" Association="Marketplace.Api.Data.Store.FK__OrderItem__Produ__619B8048">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__PickupPo__5AEE82B9" Association="Marketplace.Api.Data.Store.FK__Orders__PickupPo__5AEE82B9">
+      <End Role="PickupPoints" EntitySet="PickupPoints" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__UserId__5812160E" Association="Marketplace.Api.Data.Store.FK__Orders__UserId__5812160E">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Products__Catego__3F466844" Association="Marketplace.Api.Data.Store.FK__Products__Catego__3F466844">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Reviews__Product__5441852A" Association="Marketplace.Api.Data.Store.FK__Reviews__Product__5441852A">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Reviews" EntitySet="Reviews" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Reviews__UserId__534D60F1" Association="Marketplace.Api.Data.Store.FK__Reviews__UserId__534D60F1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Reviews" EntitySet="Reviews" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="CartItems">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="Favorites">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderItems">
+    <Key>
+      <PropertyRef Name="OrderId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="UnitPriceKopecks" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime2" Nullable="false" />
+    <Property Name="TotalKopecks" Type="int" Nullable="false" />
+    <Property Name="PickupPointId" Type="int" />
+    <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="512" />
+    <Property Name="Status" Type="varchar" Nullable="false" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="PickupPoints">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="512" />
+    <Property Name="IsActive" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="512" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ImagePath" Type="nvarchar" Nullable="false" MaxLength="512" />
+    <Property Name="PriceKopecks" Type="int" Nullable="false" />
+    <Property Name="Stock" Type="int" Nullable="false" />
+    <Property Name="PackSize" Type="int" />
+    <Property Name="IsAvailable" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Reviews">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Rating" Type="int" Nullable="false" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="PasswordHash" Type="nvarchar" Nullable="false" MaxLength="512" />
+    <Property Name="Role" Type="varchar" Nullable="false" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK__CartItems__Produ__4BAC3F29">
+    <End Role="Products" Type="Marketplace.Api.Data.Store.Products" Multiplicity="1" />
+    <End Role="CartItems" Type="Marketplace.Api.Data.Store.CartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CartItems">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CartItems__UserI__4AB81AF0">
+    <End Role="Users" Type="Marketplace.Api.Data.Store.Users" Multiplicity="1" />
+    <End Role="CartItems" Type="Marketplace.Api.Data.Store.CartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CartItems">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Favorites__Produ__5070F446">
+    <End Role="Products" Type="Marketplace.Api.Data.Store.Products" Multiplicity="1" />
+    <End Role="Favorites" Type="Marketplace.Api.Data.Store.Favorites" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Favorites">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Favorites__UserI__4F7CD00D">
+    <End Role="Users" Type="Marketplace.Api.Data.Store.Users" Multiplicity="1" />
+    <End Role="Favorites" Type="Marketplace.Api.Data.Store.Favorites" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Favorites">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderItem__Order__60A75C0F">
+    <End Role="Orders" Type="Marketplace.Api.Data.Store.Orders" Multiplicity="1" />
+    <End Role="OrderItems" Type="Marketplace.Api.Data.Store.OrderItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderItem__Produ__619B8048">
+    <End Role="Products" Type="Marketplace.Api.Data.Store.Products" Multiplicity="1" />
+    <End Role="OrderItems" Type="Marketplace.Api.Data.Store.OrderItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__PickupPo__5AEE82B9">
+    <End Role="PickupPoints" Type="Marketplace.Api.Data.Store.PickupPoints" Multiplicity="0..1" />
+    <End Role="Orders" Type="Marketplace.Api.Data.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PickupPoints">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="PickupPointId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__UserId__5812160E">
+    <End Role="Users" Type="Marketplace.Api.Data.Store.Users" Multiplicity="1" />
+    <End Role="Orders" Type="Marketplace.Api.Data.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Products__Catego__3F466844">
+    <End Role="Categories" Type="Marketplace.Api.Data.Store.Categories" Multiplicity="1" />
+    <End Role="Products" Type="Marketplace.Api.Data.Store.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Reviews__Product__5441852A">
+    <End Role="Products" Type="Marketplace.Api.Data.Store.Products" Multiplicity="1" />
+    <End Role="Reviews" Type="Marketplace.Api.Data.Store.Reviews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reviews">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Reviews__UserId__534D60F1">
+    <End Role="Users" Type="Marketplace.Api.Data.Store.Users" Multiplicity="1" />
+    <End Role="Reviews" Type="Marketplace.Api.Data.Store.Reviews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reviews">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
+    </edmx:StorageModels>
+    <edmx:ConceptualModels>
+<Schema Namespace="Marketplace.Api.Data" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="MarketplaceEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CartItems" EntityType="Marketplace.Api.Data.CartItems" />
+    <EntitySet Name="Categories" EntityType="Marketplace.Api.Data.Categories" />
+    <EntitySet Name="OrderItems" EntityType="Marketplace.Api.Data.OrderItems" />
+    <EntitySet Name="Orders" EntityType="Marketplace.Api.Data.Orders" />
+    <EntitySet Name="PickupPoints" EntityType="Marketplace.Api.Data.PickupPoints" />
+    <EntitySet Name="Products" EntityType="Marketplace.Api.Data.Products" />
+    <EntitySet Name="Reviews" EntityType="Marketplace.Api.Data.Reviews" />
+    <EntitySet Name="Users" EntityType="Marketplace.Api.Data.Users" />
+    <AssociationSet Name="FK__CartItems__Produ__4BAC3F29" Association="Marketplace.Api.Data.FK__CartItems__Produ__4BAC3F29">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="CartItems" EntitySet="CartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CartItems__UserI__4AB81AF0" Association="Marketplace.Api.Data.FK__CartItems__UserI__4AB81AF0">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="CartItems" EntitySet="CartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Products__Catego__3F466844" Association="Marketplace.Api.Data.FK__Products__Catego__3F466844">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderItem__Order__60A75C0F" Association="Marketplace.Api.Data.FK__OrderItem__Order__60A75C0F">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderItem__Produ__619B8048" Association="Marketplace.Api.Data.FK__OrderItem__Produ__619B8048">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__PickupPo__5AEE82B9" Association="Marketplace.Api.Data.FK__Orders__PickupPo__5AEE82B9">
+      <End Role="PickupPoints" EntitySet="PickupPoints" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__UserId__5812160E" Association="Marketplace.Api.Data.FK__Orders__UserId__5812160E">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Reviews__Product__5441852A" Association="Marketplace.Api.Data.FK__Reviews__Product__5441852A">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Reviews" EntitySet="Reviews" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Reviews__UserId__534D60F1" Association="Marketplace.Api.Data.FK__Reviews__UserId__534D60F1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Reviews" EntitySet="Reviews" />
+    </AssociationSet>
+    <AssociationSet Name="Favorites" Association="Marketplace.Api.Data.Favorites">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="CartItems">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Products" Relationship="Marketplace.Api.Data.FK__CartItems__Produ__4BAC3F29" FromRole="CartItems" ToRole="Products" />
+    <NavigationProperty Name="Users" Relationship="Marketplace.Api.Data.FK__CartItems__UserI__4AB81AF0" FromRole="CartItems" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Products" Relationship="Marketplace.Api.Data.FK__Products__Catego__3F466844" FromRole="Categories" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="OrderItems">
+    <Key>
+      <PropertyRef Name="OrderId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="UnitPriceKopecks" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Marketplace.Api.Data.FK__OrderItem__Order__60A75C0F" FromRole="OrderItems" ToRole="Orders" />
+    <NavigationProperty Name="Products" Relationship="Marketplace.Api.Data.FK__OrderItem__Produ__619B8048" FromRole="OrderItems" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
+    <Property Name="TotalKopecks" Type="Int32" Nullable="false" />
+    <Property Name="PickupPointId" Type="Int32" />
+    <Property Name="DeliveryAddress" Type="String" MaxLength="512" Unicode="true" FixedLength="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="OrderItems" Relationship="Marketplace.Api.Data.FK__OrderItem__Order__60A75C0F" FromRole="Orders" ToRole="OrderItems" />
+    <NavigationProperty Name="PickupPoints" Relationship="Marketplace.Api.Data.FK__Orders__PickupPo__5AEE82B9" FromRole="Orders" ToRole="PickupPoints" />
+    <NavigationProperty Name="Users" Relationship="Marketplace.Api.Data.FK__Orders__UserId__5812160E" FromRole="Orders" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="PickupPoints">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="512" Unicode="true" FixedLength="false" />
+    <Property Name="IsActive" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="Marketplace.Api.Data.FK__Orders__PickupPo__5AEE82B9" FromRole="PickupPoints" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="512" Unicode="true" FixedLength="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="ImagePath" Type="String" Nullable="false" MaxLength="512" Unicode="true" FixedLength="false" />
+    <Property Name="PriceKopecks" Type="Int32" Nullable="false" />
+    <Property Name="Stock" Type="Int32" Nullable="false" />
+    <Property Name="PackSize" Type="Int32" />
+    <Property Name="IsAvailable" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CartItems" Relationship="Marketplace.Api.Data.FK__CartItems__Produ__4BAC3F29" FromRole="Products" ToRole="CartItems" />
+    <NavigationProperty Name="Categories" Relationship="Marketplace.Api.Data.FK__Products__Catego__3F466844" FromRole="Products" ToRole="Categories" />
+    <NavigationProperty Name="OrderItems" Relationship="Marketplace.Api.Data.FK__OrderItem__Produ__619B8048" FromRole="Products" ToRole="OrderItems" />
+    <NavigationProperty Name="Reviews" Relationship="Marketplace.Api.Data.FK__Reviews__Product__5441852A" FromRole="Products" ToRole="Reviews" />
+    <NavigationProperty Name="Users" Relationship="Marketplace.Api.Data.Favorites" FromRole="Products" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Reviews">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <Property Name="Rating" Type="Int32" Nullable="false" />
+    <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Products" Relationship="Marketplace.Api.Data.FK__Reviews__Product__5441852A" FromRole="Reviews" ToRole="Products" />
+    <NavigationProperty Name="Users" Relationship="Marketplace.Api.Data.FK__Reviews__UserId__534D60F1" FromRole="Reviews" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="512" Unicode="true" FixedLength="false" />
+    <Property Name="Role" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="CartItems" Relationship="Marketplace.Api.Data.FK__CartItems__UserI__4AB81AF0" FromRole="Users" ToRole="CartItems" />
+    <NavigationProperty Name="Orders" Relationship="Marketplace.Api.Data.FK__Orders__UserId__5812160E" FromRole="Users" ToRole="Orders" />
+    <NavigationProperty Name="Reviews" Relationship="Marketplace.Api.Data.FK__Reviews__UserId__534D60F1" FromRole="Users" ToRole="Reviews" />
+    <NavigationProperty Name="Products" Relationship="Marketplace.Api.Data.Favorites" FromRole="Users" ToRole="Products" />
+  </EntityType>
+  <Association Name="FK__CartItems__Produ__4BAC3F29">
+    <End Role="Products" Type="Marketplace.Api.Data.Products" Multiplicity="1" />
+    <End Role="CartItems" Type="Marketplace.Api.Data.CartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CartItems">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CartItems__UserI__4AB81AF0">
+    <End Role="Users" Type="Marketplace.Api.Data.Users" Multiplicity="1" />
+    <End Role="CartItems" Type="Marketplace.Api.Data.CartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CartItems">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Products__Catego__3F466844">
+    <End Role="Categories" Type="Marketplace.Api.Data.Categories" Multiplicity="1" />
+    <End Role="Products" Type="Marketplace.Api.Data.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderItem__Order__60A75C0F">
+    <End Role="Orders" Type="Marketplace.Api.Data.Orders" Multiplicity="1" />
+    <End Role="OrderItems" Type="Marketplace.Api.Data.OrderItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderItem__Produ__619B8048">
+    <End Role="Products" Type="Marketplace.Api.Data.Products" Multiplicity="1" />
+    <End Role="OrderItems" Type="Marketplace.Api.Data.OrderItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderItems">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__PickupPo__5AEE82B9">
+    <End Role="PickupPoints" Type="Marketplace.Api.Data.PickupPoints" Multiplicity="0..1" />
+    <End Role="Orders" Type="Marketplace.Api.Data.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PickupPoints">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="PickupPointId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__UserId__5812160E">
+    <End Role="Users" Type="Marketplace.Api.Data.Users" Multiplicity="1" />
+    <End Role="Orders" Type="Marketplace.Api.Data.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Reviews__Product__5441852A">
+    <End Role="Products" Type="Marketplace.Api.Data.Products" Multiplicity="1" />
+    <End Role="Reviews" Type="Marketplace.Api.Data.Reviews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reviews">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Reviews__UserId__534D60F1">
+    <End Role="Users" Type="Marketplace.Api.Data.Users" Multiplicity="1" />
+    <End Role="Reviews" Type="Marketplace.Api.Data.Reviews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reviews">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Favorites">
+    <End Role="Products" Type="Marketplace.Api.Data.Products" Multiplicity="*" />
+    <End Role="Users" Type="Marketplace.Api.Data.Users" Multiplicity="*" />
+  </Association>
+</Schema>
+    </edmx:ConceptualModels>
+    <edmx:Mappings>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MarketplaceApiDataStoreContainer" CdmEntityContainer="MarketplaceEntities">
+    <EntitySetMapping Name="CartItems">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.CartItems">
+        <MappingFragment StoreEntitySet="CartItems">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.Categories">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderItems">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.OrderItems">
+        <MappingFragment StoreEntitySet="OrderItems">
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="UnitPriceKopecks" ColumnName="UnitPriceKopecks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.Orders">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="TotalKopecks" ColumnName="TotalKopecks" />
+          <ScalarProperty Name="PickupPointId" ColumnName="PickupPointId" />
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PickupPoints">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.PickupPoints">
+        <MappingFragment StoreEntitySet="PickupPoints">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.Products">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+          <ScalarProperty Name="PriceKopecks" ColumnName="PriceKopecks" />
+          <ScalarProperty Name="Stock" ColumnName="Stock" />
+          <ScalarProperty Name="PackSize" ColumnName="PackSize" />
+          <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reviews">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.Reviews">
+        <MappingFragment StoreEntitySet="Reviews">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="Marketplace.Api.Data.Users">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="Favorites" TypeName="Marketplace.Api.Data.Favorites" StoreEntitySet="Favorites">
+      <EndProperty Name="Products">
+        <ScalarProperty Name="Id" ColumnName="ProductId" />
+      </EndProperty>
+      <EndProperty Name="Users">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <edmx:Designer>
+    <edmx:Connection><edmx:DesignerInfoPropertySet>
+      <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+    </edmx:DesignerInfoPropertySet></edmx:Connection>
+    <edmx:Options><edmx:DesignerInfoPropertySet>
+      <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+    </edmx:DesignerInfoPropertySet></edmx:Options>
+    <edmx:Diagrams />
+  </edmx:Designer>
+</edmx:Edmx>

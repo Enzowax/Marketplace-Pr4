@@ -3,7 +3,12 @@
     "name": "Marketplace API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [{ "key": "baseUrl", "value": "http://localhost:5124" }],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5124"
+    }
+  ],
   "item": [
     {
       "name": "Health",
@@ -23,6 +28,27 @@
               "});"
             ]
           }
+        }
+      ]
+    },
+    {
+      "name": "List categories from SQL Server",
+      "request": {
+        "url": "{{baseUrl}}/api/categories",
+        "method": "GET"
+      },
+      "event": [
+        {
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Categories return an array', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
+          },
+          "listen": "test"
         }
       ]
     }
