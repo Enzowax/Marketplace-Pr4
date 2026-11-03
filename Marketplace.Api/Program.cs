@@ -1,3 +1,4 @@
+using Marketplace.Api;
 using System.Data.Entity;
 using Marketplace.Api.Data;
 
@@ -18,5 +19,7 @@ app.MapGet("/api/categories", async (MarketplaceEntities db, CancellationToken c
         .OrderBy(category => category.Name)
         .Select(category => new { category.Id, category.Name })
         .ToListAsync(cancellationToken));
+
+app.MapCatalog();
 
 app.Run();

@@ -51,6 +51,47 @@
           "listen": "test"
         }
       ]
+    },
+    {
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test('Catalog returns an array', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "url": "{{baseUrl}}/api/products?search=tea&minPriceKopecks=100&maxPriceKopecks=60000",
+        "method": "GET"
+      },
+      "name": "Filter public catalog"
+    },
+    {
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test('Invalid filters return 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "url": "{{baseUrl}}/api/products?minPriceKopecks=200&maxPriceKopecks=100",
+        "method": "GET"
+      },
+      "name": "Reject inverted price range"
     }
   ]
 }
