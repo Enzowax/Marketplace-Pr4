@@ -7,6 +7,11 @@
     {
       "key": "baseUrl",
       "value": "http://localhost:5124"
+    },
+    {
+      "value": "",
+      "key": "cartProductId",
+      "description": "ID тестового товара с остатком не менее двух единиц."
     }
   ],
   "item": [
@@ -192,6 +197,114 @@
         }
       ],
       "name": "Регистрация и вход"
+    },
+    {
+      "item": [
+        {
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/cart"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Доступ закрыт\", () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Гостю нужна авторизация"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"quantity\":2}"
+            },
+            "url": "{{baseUrl}}/api/cart/{{cartProductId}}",
+            "method": "PUT"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Количество сохранено\", () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Сохранить количество"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/cart",
+            "method": "GET"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Корзина и сумма получены\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "    const cart = pm.response.json();",
+                  "    pm.expect(cart.totalKopecks).to.eql(cart.items.reduce((sum, row) => sum + row.priceKopecks * row.quantity, 0));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Показать корзину"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/cart/{{cartProductId}}",
+            "method": "DELETE"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Товар удалён\", () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Удалить товар"
+        }
+      ],
+      "name": "Корзина",
+      "description": "Выполните папку «Регистрация и вход», затем укажите cartProductId для тестового товара."
     }
   ]
 }
