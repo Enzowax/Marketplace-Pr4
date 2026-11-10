@@ -92,6 +92,106 @@
         "method": "GET"
       },
       "name": "Reject inverted price range"
+    },
+    {
+      "item": [
+        {
+          "name": "Регистрация",
+          "request": {
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Content-Type"
+              }
+            ],
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "raw": "{\"login\":\"{{testLogin}}\",\"password\":\"{{testPassword}}\",\"confirmPassword\":\"{{testPassword}}\"}",
+              "mode": "raw"
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set(\"testLogin\", \"postman_\" + pm.variables.replaceIn(\"{{$guid}}\"));",
+                  "pm.collectionVariables.set(\"testPassword\", pm.variables.replaceIn(\"{{$guid}}\"));"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Аккаунт создан\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Вход",
+          "request": {
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Content-Type"
+              }
+            ],
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/login",
+            "body": {
+              "raw": "{\"login\":\"{{testLogin}}\",\"password\":\"{{testPassword}}\"}",
+              "mode": "raw"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Вход выполнен\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) pm.collectionVariables.set(\"accessToken\", pm.response.json().accessToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Профиль",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/me"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Открыт профиль покупателя\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.json().login).to.eql(pm.collectionVariables.get(\"testLogin\"));",
+                  "    pm.expect(pm.response.json().role).to.eql(\"User\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "Регистрация и вход"
     }
   ]
 }

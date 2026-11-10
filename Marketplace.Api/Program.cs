@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Identity;
 using Marketplace.Api;
 using System.Data.Entity;
 using Marketplace.Api.Data;
@@ -10,6 +12,10 @@ var connectionString = builder.Configuration.GetConnectionString("Marketplace")
 
 builder.Services.AddScoped(_ => new MarketplaceEntities(connectionString));
 
+builder.Services.AddAuthentication(BearerTokenDefaults.AuthenticationScheme).AddBearerToken();
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
+
 var app = builder.Build();
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
@@ -21,5 +27,6 @@ app.MapGet("/api/categories", async (MarketplaceEntities db, CancellationToken c
         .ToListAsync(cancellationToken));
 
 app.MapCatalog();
+app.MapAccounts();
 
 app.Run();
