@@ -83,7 +83,7 @@ public partial class MainWindow : Window
 
     public sealed record CategoryItem(int Id, string Name);
 
-    public sealed record ProductItem(string Name, string Description, string Category,
+    public sealed record ProductItem(int Id, string Name, string Description, string Category,
         int PriceKopecks, int Stock, int? PackSize, bool CanBuy, double? Rating)
     {
         public decimal Price => PriceKopecks / 100m;

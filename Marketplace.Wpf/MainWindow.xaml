@@ -16,6 +16,7 @@
             </WrapPanel>
             <WrapPanel x:Name="AccountSession" Visibility="Collapsed">
                 <TextBlock x:Name="AccountName" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <Button Content="Корзина" Click="Cart_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Выйти" Click="Logout_Click" Padding="10,3"/>
             </WrapPanel>
             <TextBlock x:Name="AccountStatus" Margin="0,4,0,0" TextWrapping="Wrap"/>
@@ -38,6 +39,8 @@
             <TextBlock Text="{Binding Description}" Margin="0,8" TextWrapping="Wrap"/>
             <TextBlock Text="{Binding Stock, StringFormat='Остаток: {0}'}"/>
             <TextBlock Text="{Binding PackSize, StringFormat='В упаковке: {0}'}"/>
+            <Button Content="В корзину" Click="AddToCart_Click" Margin="0,12,0,0"
+                    HorizontalAlignment="Left" IsEnabled="{Binding CanBuy, FallbackValue=False}"/>
         </StackPanel>
         <DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" IsReadOnly="True"
                   SelectionMode="Single" HeadersVisibility="Column">
