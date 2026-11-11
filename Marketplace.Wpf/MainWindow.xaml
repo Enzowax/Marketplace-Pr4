@@ -1,0 +1,56 @@
+<Window x:Class="Marketplace.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Маркетплейс — каталог" Height="540" Width="950" MinWidth="760">
+    <DockPanel Margin="18">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <WrapPanel x:Name="AccountForm">
+                <Label Content="Логин" Target="{Binding ElementName=LoginBox}"/>
+                <TextBox x:Name="LoginBox" Width="115" MaxLength="100" Margin="0,0,8,0"/>
+                <Label Content="Пароль" Target="{Binding ElementName=PasswordBox}"/>
+                <PasswordBox x:Name="PasswordBox" Width="105" MaxLength="128" Margin="0,0,8,0"/>
+                <Label Content="Повтор пароля" Target="{Binding ElementName=ConfirmBox}"/>
+                <PasswordBox x:Name="ConfirmBox" Width="105" MaxLength="128" Margin="0,0,8,0"/>
+                <Button Content="Войти" Click="Login_Click" Padding="10,3" Margin="0,0,8,0"/>
+                <Button Content="Регистрация" Click="Register_Click" Padding="10,3"/>
+            </WrapPanel>
+            <WrapPanel x:Name="AccountSession" Visibility="Collapsed">
+                <TextBlock x:Name="AccountName" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <Button Content="Корзина" Click="Cart_Click" Padding="10,3" Margin="0,0,8,0"/>
+                <Button Content="Выйти" Click="Logout_Click" Padding="10,3"/>
+            </WrapPanel>
+            <TextBlock x:Name="AccountStatus" Margin="0,4,0,0" TextWrapping="Wrap"/>
+        </StackPanel>
+        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <TextBox x:Name="SearchBox" Width="180" Margin="0,0,8,0"
+                     ToolTip="Поиск по названию" AutomationProperties.Name="Название товара"/>
+            <ComboBox x:Name="CategoryBox" Width="170" Margin="0,0,8,0"
+                      DisplayMemberPath="Name" AutomationProperties.Name="Категория"/>
+            <TextBox x:Name="MinPriceBox" Width="90" Margin="0,0,8,0"
+                     ToolTip="Цена от, ₽" AutomationProperties.Name="Цена от, ₽"/>
+            <TextBox x:Name="MaxPriceBox" Width="90" Margin="0,0,8,0"
+                     ToolTip="Цена до, ₽" AutomationProperties.Name="Цена до, ₽"/>
+            <Button x:Name="SearchButton" Content="Найти" Padding="12,4" Click="Search_Click" IsDefault="True"/>
+        </WrapPanel>
+        <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <StackPanel DockPanel.Dock="Right" Width="245" Margin="16,0,0,0"
+                    DataContext="{Binding SelectedItem, ElementName=ProductsGrid}">
+            <TextBlock Text="{Binding Name}" FontSize="19" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Description}" Margin="0,8" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Stock, StringFormat='Остаток: {0}'}"/>
+            <TextBlock Text="{Binding PackSize, StringFormat='В упаковке: {0}'}"/>
+            <Button Content="В корзину" Click="AddToCart_Click" Margin="0,12,0,0"
+                    HorizontalAlignment="Left" IsEnabled="{Binding CanBuy, FallbackValue=False}"/>
+        </StackPanel>
+        <DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                  SelectionMode="Single" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Товар" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="*"/>
+                <DataGridTextColumn Header="Цена, ₽" Binding="{Binding Price, StringFormat=N2}"/>
+                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating, StringFormat=N1}"/>
+                <DataGridCheckBoxColumn Header="В продаже" Binding="{Binding CanBuy}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
