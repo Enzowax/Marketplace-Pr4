@@ -1,0 +1,310 @@
+{
+  "info": {
+    "name": "Marketplace API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5124"
+    },
+    {
+      "value": "",
+      "key": "cartProductId",
+      "description": "ID тестового товара с остатком не менее двух единиц."
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('API is reachable', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json().status).to.eql('ok');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List categories from SQL Server",
+      "request": {
+        "url": "{{baseUrl}}/api/categories",
+        "method": "GET"
+      },
+      "event": [
+        {
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Categories return an array', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
+          },
+          "listen": "test"
+        }
+      ]
+    },
+    {
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test('Catalog returns an array', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "url": "{{baseUrl}}/api/products?search=tea&minPriceKopecks=100&maxPriceKopecks=60000",
+        "method": "GET"
+      },
+      "name": "Filter public catalog"
+    },
+    {
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test('Invalid filters return 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "url": "{{baseUrl}}/api/products?minPriceKopecks=200&maxPriceKopecks=100",
+        "method": "GET"
+      },
+      "name": "Reject inverted price range"
+    },
+    {
+      "item": [
+        {
+          "name": "Регистрация",
+          "request": {
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Content-Type"
+              }
+            ],
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "raw": "{\"login\":\"{{testLogin}}\",\"password\":\"{{testPassword}}\",\"confirmPassword\":\"{{testPassword}}\"}",
+              "mode": "raw"
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set(\"testLogin\", \"postman_\" + pm.variables.replaceIn(\"{{$guid}}\"));",
+                  "pm.collectionVariables.set(\"testPassword\", pm.variables.replaceIn(\"{{$guid}}\"));"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Аккаунт создан\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Вход",
+          "request": {
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Content-Type"
+              }
+            ],
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/login",
+            "body": {
+              "raw": "{\"login\":\"{{testLogin}}\",\"password\":\"{{testPassword}}\"}",
+              "mode": "raw"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Вход выполнен\", () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) pm.collectionVariables.set(\"accessToken\", pm.response.json().accessToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Профиль",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/me"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Открыт профиль покупателя\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.json().login).to.eql(pm.collectionVariables.get(\"testLogin\"));",
+                  "    pm.expect(pm.response.json().role).to.eql(\"User\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "Регистрация и вход"
+    },
+    {
+      "item": [
+        {
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/cart"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Доступ закрыт\", () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Гостю нужна авторизация"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"quantity\":2}"
+            },
+            "url": "{{baseUrl}}/api/cart/{{cartProductId}}",
+            "method": "PUT"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Количество сохранено\", () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Сохранить количество"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/cart",
+            "method": "GET"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Корзина и сумма получены\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "    const cart = pm.response.json();",
+                  "    pm.expect(cart.totalKopecks).to.eql(cart.items.reduce((sum, row) => sum + row.priceKopecks * row.quantity, 0));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Показать корзину"
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/cart/{{cartProductId}}",
+            "method": "DELETE"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Товар удалён\", () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Удалить товар"
+        }
+      ],
+      "name": "Корзина",
+      "description": "Выполните папку «Регистрация и вход», затем укажите cartProductId для тестового товара."
+    }
+  ]
+}
