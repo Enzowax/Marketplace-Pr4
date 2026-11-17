@@ -39,6 +39,8 @@
             <TextBlock Text="{Binding Description}" Margin="0,8" TextWrapping="Wrap"/>
             <TextBlock Text="{Binding Stock, StringFormat='Остаток: {0}'}"/>
             <TextBlock Text="{Binding PackSize, StringFormat='В упаковке: {0}'}"/>
+            <Button Content="Купить сразу" Click="BuyNow_Click" Margin="0,12,0,0"
+                    HorizontalAlignment="Left" IsEnabled="{Binding CanBuy, FallbackValue=False}"/>
             <Button Content="В корзину" Click="AddToCart_Click" Margin="0,12,0,0"
                     HorizontalAlignment="Left" IsEnabled="{Binding CanBuy, FallbackValue=False}"/>
         </StackPanel>

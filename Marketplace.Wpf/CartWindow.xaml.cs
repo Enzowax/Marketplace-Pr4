@@ -87,6 +87,12 @@ public partial class CartWindow : Window
         });
     }
 
+    private async void Checkout_Click(object sender, RoutedEventArgs e)
+    {
+        if (new CheckoutWindow(api) { Owner = this }.ShowDialog() == true)
+            await RunAsync(() => LoadAsync(null));
+    }
+
     private async Task RunAsync(Func<Task> action)
     {
         IsEnabled = false;

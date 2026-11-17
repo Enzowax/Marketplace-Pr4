@@ -12,6 +12,18 @@ public partial class MainWindow
             OpenCart(product);
     }
 
+    private async void BuyNow_Click(object sender, RoutedEventArgs e)
+    {
+        if (Api.DefaultRequestHeaders.Authorization is null)
+        {
+            AccountStatus.Text = "Войдите, чтобы оформить заказ.";
+            return;
+        }
+        if (ProductsGrid.SelectedItem is ProductItem { CanBuy: true } product
+            && new CheckoutWindow(Api, product) { Owner = this }.ShowDialog() == true)
+            await LoadCatalogAsync();
+    }
+
     private void OpenCart(ProductItem? product)
     {
         if (Api.DefaultRequestHeaders.Authorization is null)
