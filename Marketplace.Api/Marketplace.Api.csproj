@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.5.2" />
+    <EntityDeploy Include="Data/Model/Marketplace.edmx" />
+  </ItemGroup>
 </Project>
