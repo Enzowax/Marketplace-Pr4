@@ -4,6 +4,16 @@ namespace Marketplace.Wpf;
 
 public partial class MainWindow
 {
+    private void OrderHistory_Click(object sender, RoutedEventArgs e)
+    {
+        if (Api.DefaultRequestHeaders.Authorization is null)
+        {
+            AccountStatus.Text = "Войдите, чтобы посмотреть заказы.";
+            return;
+        }
+        new OrderHistoryWindow(Api) { Owner = this }.ShowDialog();
+    }
+
     private void Cart_Click(object sender, RoutedEventArgs e) => OpenCart(null);
 
     private void AddToCart_Click(object sender, RoutedEventArgs e)

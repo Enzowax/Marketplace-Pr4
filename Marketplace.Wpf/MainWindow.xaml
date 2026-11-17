@@ -17,6 +17,7 @@
             <WrapPanel x:Name="AccountSession" Visibility="Collapsed">
                 <TextBlock x:Name="AccountName" VerticalAlignment="Center" Margin="0,0,12,0"/>
                 <Button Content="Корзина" Click="Cart_Click" Padding="10,3" Margin="0,0,8,0"/>
+                <Button Content="Мои заказы" Click="OrderHistory_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Выйти" Click="Logout_Click" Padding="10,3"/>
             </WrapPanel>
             <TextBlock x:Name="AccountStatus" Margin="0,4,0,0" TextWrapping="Wrap"/>
