@@ -18,6 +18,7 @@
                 <TextBlock x:Name="AccountName" VerticalAlignment="Center" Margin="0,0,12,0"/>
                 <Button Content="Корзина" Click="Cart_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Мои заказы" Click="OrderHistory_Click" Padding="10,3" Margin="0,0,8,0"/>
+                <Button Content="Избранное" Click="Favorites_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Выйти" Click="Logout_Click" Padding="10,3"/>
             </WrapPanel>
             <TextBlock x:Name="AccountStatus" Margin="0,4,0,0" TextWrapping="Wrap"/>
@@ -36,6 +37,8 @@
         <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,10,0,0" TextWrapping="Wrap"/>
         <StackPanel DockPanel.Dock="Right" Width="245" Margin="16,0,0,0"
                     DataContext="{Binding SelectedItem, ElementName=ProductsGrid}">
+            <Button x:Name="FavoriteButton" Content="В избранное" Click="AddFavorite_Click"
+                    HorizontalAlignment="Left" Margin="0,0,0,8"/>
             <TextBlock Text="{Binding Name}" FontSize="19" FontWeight="SemiBold" TextWrapping="Wrap"/>
             <TextBlock Text="{Binding Description}" Margin="0,8" TextWrapping="Wrap"/>
             <TextBlock Text="{Binding Stock, StringFormat='Остаток: {0}'}"/>
