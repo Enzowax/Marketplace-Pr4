@@ -400,6 +400,63 @@
           "listen": "test"
         }
       ]
+    },
+    {
+      "name": "Избранное",
+      "item": [
+        {
+          "name": "Добавить товар",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "url": "{{baseUrl}}/api/favorites/{{cartProductId}}",
+            "method": "PUT"
+          }
+        },
+        {
+          "name": "Показать избранное",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "url": "{{baseUrl}}/api/favorites",
+            "method": "GET"
+          }
+        },
+        {
+          "name": "Перенести в корзину",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "url": "{{baseUrl}}/api/favorites/{{cartProductId}}/cart",
+            "method": "POST"
+          }
+        },
+        {
+          "name": "Удалить из избранного",
+          "request": {
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ],
+            "url": "{{baseUrl}}/api/favorites/{{cartProductId}}",
+            "method": "DELETE"
+          }
+        }
+      ]
     }
   ]
 }
