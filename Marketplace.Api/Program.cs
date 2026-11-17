@@ -29,5 +29,6 @@ app.MapGet("/api/categories", async (MarketplaceEntities db, CancellationToken c
 app.MapCatalog();
 app.MapAccounts();
 app.MapCart();
+app.MapOrders();
 
 app.Run();

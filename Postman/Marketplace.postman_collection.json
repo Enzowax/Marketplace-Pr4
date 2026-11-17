@@ -12,6 +12,11 @@
       "value": "",
       "key": "cartProductId",
       "description": "ID тестового товара с остатком не менее двух единиц."
+    },
+    {
+      "key": "pickupPointId",
+      "value": "",
+      "description": "ID действующего ПВЗ"
     }
   ],
   "item": [
@@ -305,6 +310,63 @@
       ],
       "name": "Корзина",
       "description": "Выполните папку «Регистрация и вход», затем укажите cartProductId для тестового товара."
+    },
+    {
+      "name": "Заказы",
+      "item": [
+        {
+          "name": "Список ПВЗ",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/pickup-points"
+          }
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/orders",
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"pickupPointId\":{{pickupPointId}}}"
+            }
+          },
+          "name": "Оформить корзину в ПВЗ",
+          "event": [
+            {
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Заказ оформлен\", () => pm.response.to.have.status(201));"
+                ]
+              },
+              "listen": "test"
+            }
+          ]
+        },
+        {
+          "name": "История заказов",
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/orders",
+            "method": "GET"
+          }
+        }
+      ]
     }
   ]
 }
