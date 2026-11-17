@@ -93,8 +93,27 @@ internal static class OrderEndpoints
             {
                 order.Id, order.CreatedAt, order.TotalKopecks, order.Status,
                 order.DeliveryAddress, order.PickupPointId,
-                Items = order.OrderItems.Select(item => new { item.ProductId, item.Quantity, item.UnitPriceKopecks })
+                PickupAddress = order.PickupPoints == null ? null : order.PickupPoints.Address,
+                Items = order.OrderItems.Select(item => new { item.ProductId, Name = item.Products!.Name, item.Quantity, item.UnitPriceKopecks })
             }).ToListAsync(ct);
+        }).RequireAuthorization();
+        app.MapGet("/api/orders/{orderId:int}", async (int orderId, ClaimsPrincipal user,
+            MarketplaceEntities db, CancellationToken ct) =>
+        {
+            var userId = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var order = await db.Orders.AsNoTracking()
+                .Where(item => item.Id == orderId && item.UserId == userId)
+                .Select(item => new
+                {
+                    item.Id, item.CreatedAt, item.TotalKopecks, item.Status,
+                    item.DeliveryAddress, item.PickupPointId,
+                    PickupAddress = item.PickupPoints == null ? null : item.PickupPoints.Address,
+                    Items = item.OrderItems.OrderBy(line => line.ProductId).Select(line => new
+                    {
+                        line.ProductId, Name = line.Products!.Name, line.Quantity, line.UnitPriceKopecks
+                    })
+                }).SingleOrDefaultAsync(ct);
+            return order is null ? Results.NotFound() : Results.Ok(order);
         }).RequireAuthorization();
     }
 

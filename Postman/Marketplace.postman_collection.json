@@ -17,6 +17,11 @@
       "key": "pickupPointId",
       "value": "",
       "description": "ID действующего ПВЗ"
+    },
+    {
+      "description": "ID своего заказа",
+      "value": "",
+      "key": "orderId"
     }
   ],
   "item": [
@@ -365,6 +370,34 @@
             "url": "{{baseUrl}}/api/orders",
             "method": "GET"
           }
+        }
+      ]
+    },
+    {
+      "name": "Подробности заказа",
+      "request": {
+        "url": "{{baseUrl}}/api/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "event": [
+        {
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Состав заказа получен\", () => {",
+              "    pm.response.to.have.status(200);",
+              "    const order = pm.response.json();",
+              "    pm.expect(order.totalKopecks).to.eql(order.items.reduce((sum, row) => sum + row.unitPriceKopecks * row.quantity, 0));",
+              "});"
+            ]
+          },
+          "listen": "test"
         }
       ]
     }
