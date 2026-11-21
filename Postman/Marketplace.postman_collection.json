@@ -457,6 +457,65 @@
           }
         }
       ]
+    },
+    {
+      "name": "Отзывы",
+      "item": [
+        {
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Отзывы получены\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.rating).to.eql(body.items.length ? body.items.reduce((sum, r) => sum + r.rating, 0) / body.items.length : null);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "url": "{{baseUrl}}/api/products/{{cartProductId}}/reviews",
+            "method": "GET"
+          },
+          "name": "Чтение отзывов гостем"
+        },
+        {
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Отзыв сохранён\", () => pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products/{{cartProductId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"rating\":5,\"comment\":\"Хороший товар\"}"
+            },
+            "method": "PUT"
+          },
+          "name": "Оставить отзыв"
+        }
+      ]
     }
   ]
 }

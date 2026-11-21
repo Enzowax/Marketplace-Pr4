@@ -31,5 +31,6 @@ app.MapAccounts();
 app.MapCart();
 app.MapOrders();
 app.MapFavorites();
+app.MapReviews();
 
 app.Run();
