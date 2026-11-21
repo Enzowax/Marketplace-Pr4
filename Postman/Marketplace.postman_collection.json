@@ -516,6 +516,56 @@
           "name": "Оставить отзыв"
         }
       ]
+    },
+    {
+      "item": [
+        {
+          "name": "Все товары",
+          "request": {
+            "url": "{{baseUrl}}/api/admin/products",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Товары доступны администратору\", () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ]
+        },
+        {
+          "request": {
+            "url": "{{baseUrl}}/api/admin/categories",
+            "method": "POST",
+            "body": {
+              "raw": "{\"name\":\"Новая категория\"}",
+              "mode": "raw"
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "name": "Создать категорию"
+        }
+      ],
+      "name": "Каталог администратора"
     }
   ]
 }
