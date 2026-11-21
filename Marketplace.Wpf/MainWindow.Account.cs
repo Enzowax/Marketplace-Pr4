@@ -67,6 +67,7 @@ public partial class MainWindow
             AccountName.Text = account.Role == "Admin" ? $"{account.Login} (администратор)" : account.Login;
             AccountForm.Visibility = Visibility.Collapsed;
             AccountSession.Visibility = Visibility.Visible;
+            AdminButton.Visibility = account.Role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
         }
         catch (Exception error) when (error is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
         {
@@ -84,6 +85,7 @@ public partial class MainWindow
     {
         Api.DefaultRequestHeaders.Authorization = null;
         AccountName.Text = string.Empty;
+        AdminButton.Visibility = Visibility.Collapsed;
         AccountSession.Visibility = Visibility.Collapsed;
         AccountForm.Visibility = Visibility.Visible;
         AccountStatus.Text = string.Empty;
