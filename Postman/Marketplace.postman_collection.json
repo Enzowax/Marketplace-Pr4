@@ -566,6 +566,69 @@
         }
       ],
       "name": "Каталог администратора"
+    },
+    {
+      "name": "ПВЗ и заказы администратора",
+      "item": [
+        {
+          "name": "Все ПВЗ",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/pickup-points",
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Все заказы",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/orders",
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              }
+            ]
+          }
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Статус изменён\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "name": "Изменить статус",
+          "request": {
+            "body": {
+              "raw": "{\"status\":\"Processing\"}",
+              "mode": "raw"
+            },
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/admin/orders/{{orderId}}/status",
+            "header": [
+              {
+                "value": "Bearer {{accessToken}}",
+                "key": "Authorization"
+              },
+              {
+                "value": "application/json",
+                "key": "Content-Type"
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }

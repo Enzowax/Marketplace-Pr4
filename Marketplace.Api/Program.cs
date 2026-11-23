@@ -33,5 +33,6 @@ app.MapOrders();
 app.MapFavorites();
 app.MapReviews();
 app.MapAdminCatalog();
+app.MapAdminOrders();
 
 app.Run();
