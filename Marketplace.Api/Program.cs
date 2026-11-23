@@ -18,6 +18,14 @@ builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 
 var app = builder.Build();
 
+if (builder.Configuration["make-admin"] is string adminLogin)
+{
+
+    using var scope = app.Services.CreateScope();
+    await AdminSetup.PromoteAsync(scope.ServiceProvider.GetRequiredService<MarketplaceEntities>(), adminLogin);
+    return;
+}
+
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.MapGet("/api/categories", async (MarketplaceEntities db, CancellationToken cancellationToken) =>

@@ -1,0 +1,47 @@
+# Marketplace — практическая работа №4
+
+Учебный маркетплейс. SQL Server, Entity Framework 6 Database First с моделью ADO.NET Marketplace.edmx, LINQ, ASP.NET Core API и WPF.
+
+## Подготовка
+
+Нужны Windows, Visual Studio 2022 с компонентами .NET Desktop и ASP.NET, .NET SDK 9, SQL Server Express, SQL Server Management Studio 20 и Postman.
+
+1. Откройте SSMS 20 и подключитесь к своему экземпляру SQL Server.
+2. Выполните Marketplace.Api/Data/create-database.sql.
+3. Выберите базу MarketplacePr4 и один раз выполните Marketplace.Api/Data/schema.sql. На уже созданной базе этот шаг пропускается.
+4. Выполните Marketplace.Api/Data/seed.sql. Повторный запуск сохраняет существующие товары и остатки.
+5. Проверьте сервер в ConnectionStrings/Marketplace файла Marketplace.Api/appsettings.Development.json. По умолчанию используется .\SQLEXPRESS с Windows-аутентификацией.
+6. Откройте Marketplace.sln в Visual Studio и восстановите NuGet-пакеты.
+
+Демонстрационные товары стоят 599, 600 и 601 рубль. Доставка доступна строго при сумме больше 600 рублей. Изображения демонстрационных товаров сгенерированы ИИ и хранятся в Marketplace.Wpf/Images. Файлы изображения из редактора администратора добавляйте в эту папку и пересобирайте клиент.
+
+## Запуск из Visual Studio
+
+В свойствах решения выберите запуск нескольких проектов, включите Marketplace.Api и Marketplace.Wpf. Для API выберите профиль http, адрес http://localhost:5124. Запустите решение. Если клиент открылся раньше API, нажмите «Найти» после запуска сервера.
+
+API получает строку подключения из конфигурации. WPF обращается к API через HttpClient. Запросы к БД выполняются через контекст MarketplaceEntities и LINQ.
+
+## Аккаунты
+
+Зарегистрируйте покупателя через WPF. Пароль должен содержать 8–128 символов, логин — 3–100 символов без пробелов.
+
+Для назначения администратора зарегистрируйте отдельный аккаунт, затем в терминале Visual Studio выполните из папки решения команду, подставив его логин.
+
+~~~powershell
+dotnet run --project Marketplace.Api --launch-profile http -- --make-admin ЛОГИН
+~~~
+
+Команда использует локальное подключение к SQL Server и завершается после назначения роли. Повторно войдите в приложение, чтобы получить новый токен с ролью Admin.
+
+## Postman
+
+Импортируйте Postman/Marketplace.postman_collection.json. baseUrl по умолчанию равен http://localhost:5124. Папка «Регистрация и вход» создаёт тестового покупателя и сохраняет accessToken. Для административных запросов войдите администратором и используйте его токен. Укажите cartProductId, pickupPointId и orderId из ответов API.
+
+Проверяйте создание заказа на тестовых данных. Эти запросы изменяют корзину и остатки.
+
+## Распределение работы
+
+- Enzowax — схема SQL Server, модель ADO.NET, API, права доступа и коллекция Postman.
+- abobus228online — WPF, пользовательские окна и формы администратора.
+
+Работа ведётся в feature/api и feature/wpf. Готовые части объединяются в main.
