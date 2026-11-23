@@ -13,18 +13,6 @@
 3. В [appsettings.Development.json](Marketplace.Api/appsettings.Development.json) проверьте имя сервера. По умолчанию указан `.\SQLEXPRESS` с входом через Windows.
 4. Откройте [Marketplace.sln](Marketplace.sln) в Visual Studio. Запустите `Marketplace.Api` с профилем `http`, затем `Marketplace.Wpf`. Адрес API — `http://localhost:5124`.
 
-## Как проверить
-
-Зарегистрируйтесь в приложении, добавьте товар в корзину и оформите заказ. При сумме до 600 ₽ включительно доступен самовывоз, при большей сумме можно выбрать доставку.
-
-Для проверки админки зарегистрируйте отдельный аккаунт. Из папки решения выполните команду, подставив его логин, и войдите заново.
-
-~~~powershell
-dotnet run --project Marketplace.Api --launch-profile http -- --make-admin ЛОГИН
-~~~
-
-Для проверки API импортируйте [коллекцию в Postman](Postman/Marketplace.postman_collection.json). Для административных запросов укажите токен администратора в переменной `adminToken`.
-
 ## Кто за что отвечал
 
 - **Enzowax** — база данных, API и коллекция Postman.
