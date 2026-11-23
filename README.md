@@ -1,47 +1,31 @@
 # Marketplace — практическая работа №4
 
-Учебный маркетплейс. SQL Server, Entity Framework 6 Database First с моделью ADO.NET Marketplace.edmx, LINQ, ASP.NET Core API и WPF.
+Учебный магазин на WPF. Покупатель может искать товары, добавлять их в корзину и оформлять заказы. Администратор управляет товарами, категориями, пунктами выдачи и статусами заказов.
 
-## Подготовка
+В проекте используются C#, WPF, ASP.NET Core, SQL Server и Entity Framework 6 с моделью `Marketplace.edmx`.
 
-Нужны Windows, Visual Studio 2022 с компонентами .NET Desktop и ASP.NET, .NET SDK 9, SQL Server Express, SQL Server Management Studio 20 и Postman.
+## Как запустить
 
-1. Откройте SSMS 20 и подключитесь к своему экземпляру SQL Server.
-2. Выполните Marketplace.Api/Data/create-database.sql.
-3. Выберите базу MarketplacePr4 и один раз выполните Marketplace.Api/Data/schema.sql. На уже созданной базе этот шаг пропускается.
-4. Выполните Marketplace.Api/Data/seed.sql. Повторный запуск сохраняет существующие товары и остатки.
-5. Проверьте сервер в ConnectionStrings/Marketplace файла Marketplace.Api/appsettings.Development.json. По умолчанию используется .\SQLEXPRESS с Windows-аутентификацией.
-6. Откройте Marketplace.sln в Visual Studio и восстановите NuGet-пакеты.
+Нужны Visual Studio 2022 с поддержкой WPF и ASP.NET, .NET SDK 9, SQL Server Express и SSMS 20.
 
-Демонстрационные товары стоят 599, 600 и 601 рубль. Доставка доступна строго при сумме больше 600 рублей. Изображения демонстрационных товаров сгенерированы ИИ и хранятся в Marketplace.Wpf/Images. Файлы изображения из редактора администратора добавляйте в эту папку и пересобирайте клиент.
+1. В SSMS выполните [create-database.sql](Marketplace.Api/Data/create-database.sql). Выберите базу `MarketplacePr4` и выполните [schema.sql](Marketplace.Api/Data/schema.sql), если таблицы ещё не созданы.
+2. Выполните [seed.sql](Marketplace.Api/Data/seed.sql), чтобы добавить учебные товары и пункты выдачи.
+3. В [appsettings.Development.json](Marketplace.Api/appsettings.Development.json) проверьте имя сервера. По умолчанию указан `.\SQLEXPRESS` с входом через Windows.
+4. Откройте [Marketplace.sln](Marketplace.sln) в Visual Studio. Запустите `Marketplace.Api` с профилем `http`, затем `Marketplace.Wpf`. Адрес API — `http://localhost:5124`.
 
-## Запуск из Visual Studio
+## Как проверить
 
-В свойствах решения выберите запуск нескольких проектов, включите Marketplace.Api и Marketplace.Wpf. Для API выберите профиль http, адрес http://localhost:5124. Запустите решение. Если клиент открылся раньше API, нажмите «Найти» после запуска сервера.
+Зарегистрируйтесь в приложении, добавьте товар в корзину и оформите заказ. При сумме до 600 ₽ включительно доступен самовывоз, при большей сумме можно выбрать доставку.
 
-API получает строку подключения из конфигурации. WPF обращается к API через HttpClient. Запросы к БД выполняются через контекст MarketplaceEntities и LINQ.
-
-## Аккаунты
-
-Зарегистрируйте покупателя через WPF. Пароль должен содержать 8–128 символов, логин — 3–100 символов без пробелов.
-
-Для назначения администратора зарегистрируйте отдельный аккаунт, затем в терминале Visual Studio выполните из папки решения команду, подставив его логин.
+Для проверки админки зарегистрируйте отдельный аккаунт. Из папки решения выполните команду, подставив его логин, и войдите заново.
 
 ~~~powershell
 dotnet run --project Marketplace.Api --launch-profile http -- --make-admin ЛОГИН
 ~~~
 
-Команда использует локальное подключение к SQL Server и завершается после назначения роли. Повторно войдите в приложение, чтобы получить новый токен с ролью Admin.
+Для проверки API импортируйте [коллекцию в Postman](Postman/Marketplace.postman_collection.json). Для административных запросов укажите токен администратора в переменной `adminToken`.
 
-## Postman
+## Кто за что отвечал
 
-Импортируйте Postman/Marketplace.postman_collection.json. baseUrl по умолчанию равен http://localhost:5124. Папка «Регистрация и вход» создаёт тестового покупателя и сохраняет accessToken. При прогоне по порядку коллекция подставляет идентификаторы товара, ПВЗ и созданного заказа. Для административных папок установите переменную adminToken из ответа на вход под аккаунтом администратора. Для запуска только покупательских сценариев снимите выбор с двух административных папок в Runner.
-
-Проверяйте создание заказа на тестовых данных. Эти запросы изменяют корзину и остатки.
-
-## Распределение работы
-
-- Enzowax — схема SQL Server, модель ADO.NET, API, права доступа и коллекция Postman.
-- abobus228online — WPF, пользовательские окна и формы администратора.
-
-Работа ведётся в feature/api и feature/wpf. Готовые части объединяются в main.
+- **Enzowax** — база данных, API и коллекция Postman.
+- **abobus228online** — окна WPF и подключение клиента к API.
