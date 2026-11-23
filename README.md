@@ -13,4 +13,7 @@
 3. В [appsettings.Development.json](Marketplace.Api/appsettings.Development.json) проверьте имя сервера. По умолчанию указан `.\SQLEXPRESS` с входом через Windows.
 4. Откройте [Marketplace.sln](Marketplace.sln) в Visual Studio. Запустите `Marketplace.Api` с профилем `http`, затем `Marketplace.Wpf`. Адрес API — `http://localhost:5124`.
 
-**Выполнили** Новиков Дмитрий и Коскина Наталья
+## Кто за что отвечал
+
+- **Новиков Дмитрий (Enzowax)** — база данных, API и коллекция Postman.
+- **Коскина Наталья (abobus228online)** — окна WPF и подключение клиента к API.
