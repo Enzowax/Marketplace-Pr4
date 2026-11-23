@@ -1,0 +1,53 @@
+<Window x:Class="Marketplace.Wpf.AdminCatalogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Управление каталогом" Width="900" Height="680" MinWidth="740" MinHeight="580"
+        WindowStartupLocation="CenterOwner">
+    <DockPanel Margin="16">
+        <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <TabControl>
+            <TabItem Header="Товары">
+                <DockPanel Margin="10">
+                    <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <Button Content="Обновить" Click="Refresh_Click" Padding="8,4" Margin="0,0,8,0"/>
+                        <Button Content="Новый товар" Click="NewProduct_Click" Padding="8,4"/>
+                    </WrapPanel>
+                    <StackPanel DockPanel.Dock="Right" Width="310" Margin="12,0,0,0">
+                        <TextBlock Text="Название"/><TextBox x:Name="NameBox" MaxLength="512"/>
+                        <TextBlock Text="Категория" Margin="0,6,0,0"/>
+                        <ComboBox x:Name="ProductCategoryBox" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        <TextBlock Text="Описание" Margin="0,6,0,0"/>
+                        <TextBox x:Name="DescriptionBox" Height="70" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                        <TextBlock Text="Имя файла изображения" Margin="0,6,0,0"/><TextBox x:Name="ImageBox" MaxLength="512"/>
+                        <TextBlock Text="Цена, ₽" Margin="0,6,0,0"/><TextBox x:Name="PriceBox"/>
+                        <TextBlock Text="Остаток" Margin="0,6,0,0"/><TextBox x:Name="StockBox"/>
+                        <TextBlock Text="Штук в упаковке (необязательно)" Margin="0,6,0,0"/><TextBox x:Name="PackBox"/>
+                        <CheckBox x:Name="AvailableBox" Content="Доступен для покупки" Margin="0,10"/>
+                        <Button Content="Сохранить товар" Click="SaveProduct_Click" Padding="8,4"/>
+                    </StackPanel>
+                    <DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                              SelectionMode="Single" SelectionChanged="Product_Selected">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="45"/>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Остаток" Binding="{Binding Stock}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Категории">
+                <DockPanel Margin="10">
+                    <StackPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                        <TextBlock Text="Название категории"/>
+                        <TextBox x:Name="CategoryNameBox" MaxLength="150" Margin="0,4,0,8"/>
+                        <WrapPanel>
+                            <Button Content="Новая категория" Click="NewCategory_Click" Padding="8,4" Margin="0,0,8,0"/>
+                            <Button Content="Сохранить категорию" Click="SaveCategory_Click" Padding="8,4"/>
+                        </WrapPanel>
+                    </StackPanel>
+                    <ListBox x:Name="CategoriesList" DisplayMemberPath="Name" SelectionChanged="Category_Selected"/>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
