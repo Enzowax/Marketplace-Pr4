@@ -22,6 +22,11 @@
       "description": "ID своего заказа",
       "value": "",
       "key": "orderId"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "description": "Токен администратора для отдельных административных запросов"
     }
   ],
   "item": [
@@ -80,10 +85,21 @@
             "type": "text/javascript"
           },
           "listen": "test"
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const products = pm.response.json();",
+              "const product = products.find(row => row.canBuy && row.stock >= 2);",
+              "if (product && !pm.variables.get(\"cartProductId\")) pm.collectionVariables.set(\"cartProductId\", String(product.id));"
+            ]
+          }
         }
       ],
       "request": {
-        "url": "{{baseUrl}}/api/products?search=tea&minPriceKopecks=100&maxPriceKopecks=60000",
+        "url": "{{baseUrl}}/api/products?maxPriceKopecks=60100",
         "method": "GET"
       },
       "name": "Filter public catalog"
@@ -317,91 +333,6 @@
       "description": "Выполните папку «Регистрация и вход», затем укажите cartProductId для тестового товара."
     },
     {
-      "name": "Заказы",
-      "item": [
-        {
-          "name": "Список ПВЗ",
-          "request": {
-            "method": "GET",
-            "url": "{{baseUrl}}/api/pickup-points"
-          }
-        },
-        {
-          "request": {
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/api/orders",
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"pickupPointId\":{{pickupPointId}}}"
-            }
-          },
-          "name": "Оформить корзину в ПВЗ",
-          "event": [
-            {
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Заказ оформлен\", () => pm.response.to.have.status(201));"
-                ]
-              },
-              "listen": "test"
-            }
-          ]
-        },
-        {
-          "name": "История заказов",
-          "request": {
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": "{{baseUrl}}/api/orders",
-            "method": "GET"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Подробности заказа",
-      "request": {
-        "url": "{{baseUrl}}/api/orders/{{orderId}}",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{accessToken}}"
-          }
-        ],
-        "method": "GET"
-      },
-      "event": [
-        {
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"Состав заказа получен\", () => {",
-              "    pm.response.to.have.status(200);",
-              "    const order = pm.response.json();",
-              "    pm.expect(order.totalKopecks).to.eql(order.items.reduce((sum, row) => sum + row.unitPriceKopecks * row.quantity, 0));",
-              "});"
-            ]
-          },
-          "listen": "test"
-        }
-      ]
-    },
-    {
       "name": "Избранное",
       "item": [
         {
@@ -455,6 +386,113 @@
             "url": "{{baseUrl}}/api/favorites/{{cartProductId}}",
             "method": "DELETE"
           }
+        }
+      ]
+    },
+    {
+      "name": "Заказы",
+      "item": [
+        {
+          "name": "Список ПВЗ",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/pickup-points"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Получен список ПВЗ\", () => pm.response.to.have.status(200));",
+                  "const point = pm.response.json()[0];",
+                  "if (point && !pm.variables.get(\"pickupPointId\")) pm.collectionVariables.set(\"pickupPointId\", String(point.id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/orders",
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"pickupPointId\":{{pickupPointId}}}"
+            }
+          },
+          "name": "Оформить корзину в ПВЗ",
+          "event": [
+            {
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Заказ оформлен\", () => pm.response.to.have.status(201));"
+                ]
+              },
+              "listen": "test"
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set(\"orderId\", String(pm.response.json().id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "История заказов",
+          "request": {
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/orders",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Подробности заказа",
+      "request": {
+        "url": "{{baseUrl}}/api/orders/{{orderId}}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "event": [
+        {
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Состав заказа получен\", () => {",
+              "    pm.response.to.have.status(200);",
+              "    const order = pm.response.json();",
+              "    pm.expect(order.totalKopecks).to.eql(order.items.reduce((sum, row) => sum + row.unitPriceKopecks * row.quantity, 0));",
+              "});"
+            ]
+          },
+          "listen": "test"
         }
       ]
     },
@@ -527,7 +565,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
+                "value": "Bearer {{adminToken}}"
               }
             ]
           },
@@ -548,13 +586,13 @@
             "url": "{{baseUrl}}/api/admin/categories",
             "method": "POST",
             "body": {
-              "raw": "{\"name\":\"Новая категория\"}",
+              "raw": "{\"name\":\"Категория Postman {{$guid}}\"}",
               "mode": "raw"
             },
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
+                "value": "Bearer {{adminToken}}"
               },
               {
                 "key": "Content-Type",
@@ -565,7 +603,8 @@
           "name": "Создать категорию"
         }
       ],
-      "name": "Каталог администратора"
+      "name": "Каталог администратора",
+      "description": "Запускайте отдельно с adminToken администратора. Для статуса укажите orderId заказа."
     },
     {
       "name": "ПВЗ и заказы администратора",
@@ -577,7 +616,7 @@
             "url": "{{baseUrl}}/api/admin/pickup-points",
             "header": [
               {
-                "value": "Bearer {{accessToken}}",
+                "value": "Bearer {{adminToken}}",
                 "key": "Authorization"
               }
             ]
@@ -590,7 +629,7 @@
             "url": "{{baseUrl}}/api/admin/orders",
             "header": [
               {
-                "value": "Bearer {{accessToken}}",
+                "value": "Bearer {{adminToken}}",
                 "key": "Authorization"
               }
             ]
@@ -618,7 +657,7 @@
             "url": "{{baseUrl}}/api/admin/orders/{{orderId}}/status",
             "header": [
               {
-                "value": "Bearer {{accessToken}}",
+                "value": "Bearer {{adminToken}}",
                 "key": "Authorization"
               },
               {
@@ -628,7 +667,8 @@
             ]
           }
         }
-      ]
+      ],
+      "description": "Запускайте отдельно с adminToken администратора. Для статуса укажите orderId заказа."
     }
   ]
 }
