@@ -1,3 +1,5 @@
+using System.IO;
+using System.Windows.Media.Imaging;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -84,8 +86,36 @@ public partial class MainWindow : Window
     public sealed record CategoryItem(int Id, string Name);
 
     public sealed record ProductItem(int Id, string Name, string Description, string Category,
-        int PriceKopecks, int Stock, int? PackSize, bool CanBuy, double? Rating)
+        int PriceKopecks, int Stock, int? PackSize, bool CanBuy, double? Rating, string ImagePath)
     {
         public decimal Price => PriceKopecks / 100m;
+
+        public BitmapImage? Image
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(ImagePath) || Path.GetFileName(ImagePath) != ImagePath
+                    || ImagePath.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                    return null;
+                var path = Path.Combine(AppContext.BaseDirectory, "Images", ImagePath);
+                if (!File.Exists(path))
+                    return null;
+                try
+                {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(path);
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.DecodePixelWidth = 300;
+                    image.EndInit();
+                    image.Freeze();
+                    return image;
+                }
+                catch (Exception error) when (error is IOException or NotSupportedException or System.Security.SecurityException)
+                {
+                    return null;
+                }
+            }
+        }
     }
 }
