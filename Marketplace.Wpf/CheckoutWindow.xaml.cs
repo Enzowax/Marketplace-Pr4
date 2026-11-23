@@ -22,15 +22,17 @@ public partial class CheckoutWindow : Window
             {
                 PickupBox.ItemsSource = await api.GetFromJsonAsync<List<PickupPoint>>("api/pickup-points");
                 PickupBox.SelectedIndex = 0;
-                decimal? total = product?.PriceKopecks;
-                if (total is null)
+                decimal total = product?.PriceKopecks ?? 0;
+                var hasItems = product is not null;
+                if (product is null)
                 {
                     var cart = await api.GetFromJsonAsync<CartTotal>("api/cart");
-                    total = cart?.TotalKopecks;
+                    total = cart?.TotalKopecks ?? 0;
+                    hasItems = cart?.Items.Count > 0;
                 }
                 DeliveryOption.IsEnabled = total > 60000;
                 Summary.Text += $"\nСумма: {total / 100m:N2} ₽";
-                SubmitButton.IsEnabled = total > 0;
+                SubmitButton.IsEnabled = hasItems;
             }
             catch (Exception error) when (error is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
             {
@@ -78,7 +80,7 @@ public partial class CheckoutWindow : Window
     }
 
     private sealed record PickupPoint(int Id, string Address);
-    private sealed record CartTotal(decimal TotalKopecks);
+    private sealed record CartTotal(decimal TotalKopecks, List<CartWindow.CartRow> Items);
     private sealed record PlacedOrder(int Id);
     private sealed record ApiError(string Error);
 }
