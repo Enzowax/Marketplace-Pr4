@@ -20,6 +20,8 @@
                 <Button Content="Мои заказы" Click="OrderHistory_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Избранное" Click="Favorites_Click" Padding="10,3" Margin="0,0,8,0"/>
                 <Button x:Name="AdminButton" Content="Каталог администратора" Click="AdminCatalog_Click" Visibility="Collapsed" Padding="10,3" Margin="0,0,8,0"/>
+                <Button Content="ПВЗ и заказы" Click="AdminOrders_Click"
+                        Visibility="{Binding Visibility, ElementName=AdminButton}" Padding="10,3" Margin="0,0,8,0"/>
                 <Button Content="Выйти" Click="Logout_Click" Padding="10,3"/>
             </WrapPanel>
             <TextBlock x:Name="AccountStatus" Margin="0,4,0,0" TextWrapping="Wrap"/>
